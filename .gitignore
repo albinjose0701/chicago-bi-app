@@ -1,0 +1,85 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+vendor/
+go.sum
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# GCP
+*.json
+!bigquery/**/*.json
+!dashboards/*.json
+*.pem
+*.key
+service-account.json
+credentials.json
+
+# Environment
+.env
+.env.local
+.env.*.local
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Data files (large datasets)
+*.csv
+*.parquet
+*.shp
+*.shx
+*.dbf
+*.prj
+!geospatial/reference-maps/README.md
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+*.cache
+
+# OS
+Thumbs.db
+.DS_Store
