@@ -1,4 +1,4 @@
-module github.com/chicago-bi/extractors/taxi
+module github.com/chicago-bi/extractors/tnp
 
 go 1.21
 

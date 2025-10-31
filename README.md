@@ -2,10 +2,24 @@
 
 **Cloud-Native Data Lakehouse on Google Cloud Platform**
 
+---
+**Document:** Chicago BI App - Project README
+**Version:** 2.0
+**Document Type:** Architecture Documentation
+**Date:** 2025-10-31
+**Status:** Final
+**Authors:** Group 2 - MSDS 432
 **Course:** MSDSP 432 - Foundations of Data Engineering
 **Institution:** Northwestern University
-**Team:** Group 2 (Albin Anto Jose, Myetchae Thu, Ansh Gupta, Bickramjit Basu)
-**Date:** October 2025
+**Team:** Albin Anto Jose, Myetchae Thu, Ansh Gupta, Bickramjit Basu
+**Related Docs:** ARCHITECTURE_GAP_ANALYSIS.md, DEPLOYMENT_GUIDE.md v2.0.0
+---
+
+**Version 2.0 Updates:**
+- Added TNP (rideshare) trips support alongside taxi trips
+- Dual-dataset architecture: Taxi (wrvz-psew) + TNP (m6dm-c72p)
+- Updated cost analysis and architecture diagrams
+- Enhanced deployment processes for multiple datasets
 
 ---
 

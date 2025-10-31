@@ -1,6 +1,31 @@
+-- ============================================================================
 -- Chicago BI App - Bronze Layer (Raw Data)
+-- ============================================================================
+-- Schema Version: 2.0
+-- Migration: 003
+-- Date: 2025-10-31
+-- Status: Production
+--
+-- Description:
+--   Store raw ingested data with full lineage from Chicago Data Portal
+--   Supports taxi trips (wrvz-psew) and TNP trips (m6dm-c72p)
+--
+-- Version History:
+--   2.0 (M003) - 2025-10-31 - Added raw_tnp_trips table for rideshare data
+--   1.1 (M002) - 2025-10-30 - Added partitioning and clustering
+--   1.0 (M001) - 2025-10-29 - Initial schema with raw_taxi_trips
+--
+-- Tables:
+--   1. raw_taxi_trips     - Traditional taxi trip data (wrvz-psew)
+--   2. raw_tnp_trips      - TNP rideshare trip data (m6dm-c72p)
+--   3. raw_tnp_permits    - TNP driver/vehicle permits
+--   4. raw_covid_cases    - COVID-19 cases by zip code
+--   5. raw_building_permits - Building permits
+--
 -- Dataset: raw_data
--- Purpose: Store raw ingested data with full lineage
+-- Location: us-central1
+-- Purpose: Bronze layer - Raw data with full lineage
+-- ============================================================================
 
 -- Create dataset
 CREATE SCHEMA IF NOT EXISTS `chicago-bi.raw_data`
@@ -54,11 +79,58 @@ PARTITION BY DATE(trip_start_timestamp)
 CLUSTER BY pickup_centroid_latitude, pickup_centroid_longitude
 OPTIONS(
   description = "Raw taxi trip data from Chicago Data Portal",
-  require_partition_filter = TRUE,
-  partition_expiration_days = 30
+  require_partition_filter = TRUE
+  -- Manual archival: Export to GCS after analysis, no auto-expiration
 );
 
--- Table 2: Raw TNP Permits
+-- Table 2: Raw TNP Trips (Transportation Network Providers - Uber/Lyft)
+CREATE TABLE IF NOT EXISTS `chicago-bi.raw_data.raw_tnp_trips`
+(
+  -- Primary key
+  trip_id STRING NOT NULL,
+
+  -- Trip details
+  trip_start_timestamp TIMESTAMP,
+  trip_end_timestamp TIMESTAMP,
+  trip_seconds INT64,
+  trip_miles FLOAT64,
+
+  -- Pickup location
+  pickup_census_tract STRING,
+  pickup_community_area STRING,
+  pickup_centroid_latitude FLOAT64,
+  pickup_centroid_longitude FLOAT64,
+
+  -- Dropoff location
+  dropoff_census_tract STRING,
+  dropoff_community_area STRING,
+  dropoff_centroid_latitude FLOAT64,
+  dropoff_centroid_longitude FLOAT64,
+
+  -- Financial
+  fare FLOAT64,
+  tip FLOAT64,
+  additional_charges FLOAT64,
+  trip_total FLOAT64,
+
+  -- Rideshare-specific fields
+  shared_trip_authorized BOOLEAN,
+  trips_pooled INT64,
+
+  -- Metadata
+  _ingestion_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
+  _source_file STRING,
+  _api_response_code INT64
+)
+PARTITION BY DATE(trip_start_timestamp)
+CLUSTER BY pickup_centroid_latitude, pickup_centroid_longitude
+OPTIONS(
+  description = "Raw TNP (rideshare) trip data from Chicago Data Portal",
+  require_partition_filter = TRUE
+  -- Manual archival: Export to GCS after analysis, no auto-expiration
+);
+
+-- Table 3: Raw TNP Permits
 CREATE TABLE IF NOT EXISTS `chicago-bi.raw_data.raw_tnp_permits`
 (
   -- Primary key
@@ -94,11 +166,11 @@ CREATE TABLE IF NOT EXISTS `chicago-bi.raw_data.raw_tnp_permits`
 PARTITION BY issue_date
 OPTIONS(
   description = "Raw Transportation Network Provider permits",
-  require_partition_filter = TRUE,
-  partition_expiration_days = 30
+  require_partition_filter = TRUE
+  -- Manual archival: Export to GCS after analysis, no auto-expiration
 );
 
--- Table 3: Raw COVID Cases
+-- Table 4: Raw COVID Cases
 CREATE TABLE IF NOT EXISTS `chicago-bi.raw_data.raw_covid_cases`
 (
   -- Composite key
@@ -140,7 +212,7 @@ OPTIONS(
   require_partition_filter = TRUE
 );
 
--- Table 4: Raw Building Permits
+-- Table 5: Raw Building Permits
 CREATE TABLE IF NOT EXISTS `chicago-bi.raw_data.raw_building_permits`
 (
   -- Primary key
@@ -183,6 +255,6 @@ PARTITION BY issue_date
 CLUSTER BY zip_code
 OPTIONS(
   description = "Raw building permits",
-  require_partition_filter = TRUE,
-  partition_expiration_days = 30
+  require_partition_filter = TRUE
+  -- Manual archival: Export to GCS after analysis, no auto-expiration
 );

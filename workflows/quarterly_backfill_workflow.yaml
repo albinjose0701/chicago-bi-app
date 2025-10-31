@@ -1,0 +1,112 @@
+# Cloud Workflows - Quarterly Backfill Orchestration
+# This workflow orchestrates the Q1 2020 historical backfill by iterating through
+# all dates in the quarter and executing Cloud Run jobs for each date.
+
+main:
+  params: [args]
+  steps:
+    # Step 1: Initialize variables
+    - init:
+        assign:
+          - project_id: "chicago-bi-app-msds-432-476520"
+          - region: "us-central1"
+          - start_date: "2020-01-01"
+          - end_date: "2020-03-31"
+          - dataset: ${default(map.get(args, "dataset"), "taxi")}  # Default to taxi
+          - job_name: ${"extractor-" + dataset}
+          - completed: 0
+          - failed: 0
+          - current_date: ${start_date}
+
+    # Step 2: Log start
+    - log_start:
+        call: sys.log
+        args:
+          text: ${"Starting quarterly backfill for " + dataset + " from " + start_date + " to " + end_date}
+          severity: INFO
+
+    # Step 3: Generate date range and iterate
+    - iterate_dates:
+        for:
+          value: day_offset
+          range: [0, 89]  # 90 days (0 to 89 inclusive)
+          steps:
+            # Calculate current date
+            - calculate_date:
+                assign:
+                  - current_date: ${text.replace_all(text.substring(text.encode_json(time.parse("2020-01-01T00:00:00Z") + (day_offset * 86400)), 1, 11), "-", "-")}
+
+            # Log current iteration
+            - log_iteration:
+                call: sys.log
+                args:
+                  text: ${"Processing " + dataset + " for date: " + current_date + " (day " + string(day_offset + 1) + " of 90)"}
+                  severity: INFO
+
+            # Execute Cloud Run job for this date
+            - execute_cloud_run_job:
+                try:
+                  call: googleapis.run.v1.namespaces.jobs.run
+                  args:
+                    name: ${"namespaces/" + project_id + "/jobs/" + job_name}
+                    location: ${region}
+                    body:
+                      overrides:
+                        containerOverrides:
+                          - env:
+                              - name: MODE
+                                value: "full"
+                              - name: START_DATE
+                                value: ${current_date}
+                              - name: END_DATE
+                                value: ${current_date}
+                  result: job_result
+                except:
+                  as: e
+                  steps:
+                    - log_error:
+                        call: sys.log
+                        args:
+                          text: ${"Failed to execute job for " + current_date + ": " + e.message}
+                          severity: ERROR
+                    - increment_failed:
+                        assign:
+                          - failed: ${failed + 1}
+                    - continue_loop:
+                        next: continue
+
+            # Success - increment counter
+            - increment_success:
+                assign:
+                  - completed: ${completed + 1}
+
+            # Log success
+            - log_success:
+                call: sys.log
+                args:
+                  text: ${"Successfully completed " + dataset + " for " + current_date}
+                  severity: INFO
+
+            # Wait 30 seconds between executions to avoid rate limits
+            - wait_between_runs:
+                call: sys.sleep
+                args:
+                  seconds: 30
+
+    # Step 4: Log summary
+    - log_summary:
+        call: sys.log
+        args:
+          text: ${"Backfill completed. Successful: " + string(completed) + ", Failed: " + string(failed)}
+          severity: INFO
+
+    # Step 5: Return results
+    - return_results:
+        return:
+          status: "completed"
+          dataset: ${dataset}
+          total_days: 90
+          successful: ${completed}
+          failed: ${failed}
+          start_date: ${start_date}
+          end_date: ${end_date}

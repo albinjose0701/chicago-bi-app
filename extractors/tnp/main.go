@@ -16,8 +16,8 @@ import (
 )
 
 const (
-	// Chicago Data Portal API endpoint for Taxi Trips
-	baseURL = "https://data.cityofchicago.org/resource/wrvz-psew.json"
+	// Chicago Data Portal API endpoint for TNP Trips (Transportation Network Providers - Uber/Lyft)
+	baseURL = "https://data.cityofchicago.org/resource/m6dm-c72p.json"
 
 	// Batch size for pagination
 	batchSize = 50000
@@ -26,12 +26,9 @@ const (
 	projectID = "chicago-bi-app-msds-432-476520"
 )
 
-type TaxiTrip struct {
+type TNPTrip struct {
 	// Text fields
-	TripID   string `json:"trip_id"`
-	TaxiID   string `json:"taxi_id,omitempty"`
-	Company  string `json:"company,omitempty"`
-	PaymentType string `json:"payment_type,omitempty"`
+	TripID string `json:"trip_id"`
 
 	// Timestamp fields (floating_timestamp in API)
 	TripStartTimestamp string `json:"trip_start_timestamp"`
@@ -43,10 +40,13 @@ type TaxiTrip struct {
 	PickupCommunityArea string `json:"pickup_community_area,omitempty"`
 	DropoffCommunityArea string `json:"dropoff_community_area,omitempty"`
 	Fare                string `json:"fare,omitempty"`
-	Tips                string `json:"tips,omitempty"`
-	Tolls               string `json:"tolls,omitempty"`
-	Extras              string `json:"extras,omitempty"`
+	Tip                 string `json:"tip,omitempty"`
+	AdditionalCharges   string `json:"additional_charges,omitempty"`
 	TripTotal           string `json:"trip_total,omitempty"`
+	TripsPooled         string `json:"trips_pooled,omitempty"`
+
+	// Boolean fields
+	SharedTripAuthorized interface{} `json:"shared_trip_authorized,omitempty"`
 
 	// Census tract fields
 	PickupCensusTract  string `json:"pickup_census_tract,omitempty"`
@@ -117,13 +117,13 @@ func main() {
 		Mode:         getEnv("MODE", "incremental"),
 		StartDate:    getEnv("START_DATE", time.Now().AddDate(0, 0, -1).Format("2006-01-02")),
 		EndDate:      getEnv("END_DATE", time.Now().AddDate(0, 0, -1).Format("2006-01-02")),
-		OutputBucket: getEnv("OUTPUT_BUCKET", "gs://chicago-bi-landing/taxi/"),
+		OutputBucket: getEnv("OUTPUT_BUCKET", "gs://chicago-bi-landing/tnp/"),
 		SampleRate:   1.0,
 		KeyID:        keyID,
 		KeySecret:    keySecret,
 	}
 
-	log.Printf("Starting taxi extractor with config (credentials redacted): Mode=%s, StartDate=%s, EndDate=%s",
+	log.Printf("Starting TNP trips extractor with config (credentials redacted): Mode=%s, StartDate=%s, EndDate=%s",
 		config.Mode, config.StartDate, config.EndDate)
 
 	// Build SODA API query
@@ -136,14 +136,14 @@ func main() {
 		log.Fatalf("ERROR: Failed to extract data: %v", err)
 	}
 
-	log.Printf("✅ Extracted %d trips", len(trips))
+	log.Printf("✅ Extracted %d TNP trips", len(trips))
 
 	// Upload to Cloud Storage
 	if err := uploadToGCS(config.OutputBucket, trips, config.StartDate); err != nil {
 		log.Fatalf("ERROR: Failed to upload to GCS: %v", err)
 	}
 
-	log.Printf("✅ Successfully completed extraction")
+	log.Printf("✅ Successfully completed TNP trips extraction")
 }
 
 func buildQuery(config ExtractorConfig) string {
@@ -158,7 +158,7 @@ func buildQuery(config ExtractorConfig) string {
 }
 
 // Extract data with Socrata API authentication
-func extractDataWithAuth(queryURL, keyID, keySecret string) ([]TaxiTrip, error) {
+func extractDataWithAuth(queryURL, keyID, keySecret string) ([]TNPTrip, error) {
 	// Create HTTP request
 	req, err := http.NewRequest("GET", queryURL, nil)
 	if err != nil {
@@ -206,7 +206,7 @@ func extractDataWithAuth(queryURL, keyID, keySecret string) ([]TaxiTrip, error) 
 		return nil, fmt.Errorf("failed to read response: %w", err)
 	}
 
-	var trips []TaxiTrip
+	var trips []TNPTrip
 	if err := json.Unmarshal(body, &trips); err != nil {
 		return nil, fmt.Errorf("failed to parse JSON: %w", err)
 	}
@@ -214,7 +214,7 @@ func extractDataWithAuth(queryURL, keyID, keySecret string) ([]TaxiTrip, error) 
 	return trips, nil
 }
 
-func uploadToGCS(bucketPath string, trips []TaxiTrip, date string) error {
+func uploadToGCS(bucketPath string, trips []TNPTrip, date string) error {
 	ctx := context.Background()
 	client, err := storage.NewClient(ctx)
 	if err != nil {
@@ -237,7 +237,7 @@ func uploadToGCS(bucketPath string, trips []TaxiTrip, date string) error {
 	bucketName := "chicago-bi-app-msds-432-476520-landing"
 
 	// Create object path with extraction date
-	objectPath := fmt.Sprintf("taxi/%s/data.json", date)
+	objectPath := fmt.Sprintf("tnp/%s/data.json", date)
 
 	// Get bucket and object
 	bucket := client.Bucket(bucketName)
