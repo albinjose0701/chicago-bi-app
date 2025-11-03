@@ -1,0 +1,18 @@
+steps:
+  # Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/chicago-bi-app-msds-432-476520/extractor-taxi:v2.1.0'
+      - '-t'
+      - 'gcr.io/chicago-bi-app-msds-432-476520/extractor-taxi:latest'
+      - '.'
+
+images:
+  - 'gcr.io/chicago-bi-app-msds-432-476520/extractor-taxi:v2.1.0'
+  - 'gcr.io/chicago-bi-app-msds-432-476520/extractor-taxi:latest'
+
+options:
+  machineType: 'N1_HIGHCPU_8'
+  logging: CLOUD_LOGGING_ONLY

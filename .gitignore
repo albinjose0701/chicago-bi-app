@@ -83,3 +83,9 @@ temp/
 # OS
 Thumbs.db
 .DS_Store
+
+# Session context files (keep on Desktop only, not in repo)
+docs/sessions/
+SESSION_*.md
+v2.*_SESSION_*.md
+VERSION_INDEX.md

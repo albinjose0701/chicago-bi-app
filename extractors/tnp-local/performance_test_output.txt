@@ -1,0 +1,81 @@
+[0;34m================================================[0m
+[0;34mTNP Performance Test - Cloud Run (Batched)[0m
+[0;34m================================================[0m
+
+Test Period: [0;32mJan 1-14, 2020 (14 days)[0m
+Batch Size: [0;32m3 parallel jobs[0m
+Total Batches: [0;32m5[0m
+Project: [0;32mchicago-bi-app-msds-432-476520[0m
+
+[1;33mBatch 1: Processing 3 dates...[0m
+  [0;34m→[0m Launching job for 2020-01-01...
+  [0;34m→[0m Launching job for 2020-01-02...
+  [0;34m→[0m Launching job for 2020-01-03...
+  [1;33m⏳[0m Waiting for batch 1 jobs to complete...
+  \033[0;32m✅\033[0m 2020-01-03 completed successfully
+  \033[0;32m✅\033[0m 2020-01-01 completed successfully
+  \033[0;32m✅\033[0m 2020-01-02 completed successfully
+  [0;32m✅[0m Batch 1 completed in 187s
+  [1;33m⏸[0m  Waiting 10s before next batch...
+[1;33mBatch 2: Processing 3 dates...[0m
+  [0;34m→[0m Launching job for 2020-01-04...
+  [0;34m→[0m Launching job for 2020-01-05...
+  [0;34m→[0m Launching job for 2020-01-06...
+  [1;33m⏳[0m Waiting for batch 2 jobs to complete...
+  \033[0;32m✅\033[0m 2020-01-05 completed successfully
+  \033[0;32m✅\033[0m 2020-01-04 completed successfully
+  \033[0;32m✅\033[0m 2020-01-06 completed successfully
+  [0;32m✅[0m Batch 2 completed in 113s
+  [1;33m⏸[0m  Waiting 10s before next batch...
+[1;33mBatch 3: Processing 3 dates...[0m
+  [0;34m→[0m Launching job for 2020-01-07...
+  [0;34m→[0m Launching job for 2020-01-08...
+  [0;34m→[0m Launching job for 2020-01-09...
+  [1;33m⏳[0m Waiting for batch 3 jobs to complete...
+  \033[0;32m✅\033[0m 2020-01-09 completed successfully
+  \033[0;32m✅\033[0m 2020-01-08 completed successfully
+  \033[0;32m✅\033[0m 2020-01-07 completed successfully
+  [0;32m✅[0m Batch 3 completed in 104s
+  [1;33m⏸[0m  Waiting 10s before next batch...
+[1;33mBatch 4: Processing 3 dates...[0m
+  [0;34m→[0m Launching job for 2020-01-10...
+  [0;34m→[0m Launching job for 2020-01-11...
+  [0;34m→[0m Launching job for 2020-01-12...
+  [1;33m⏳[0m Waiting for batch 4 jobs to complete...
+  \033[0;32m✅\033[0m 2020-01-10 completed successfully
+  \033[0;32m✅\033[0m 2020-01-12 completed successfully
+  \033[0;32m✅\033[0m 2020-01-11 completed successfully
+  [0;32m✅[0m Batch 4 completed in 206s
+  [1;33m⏸[0m  Waiting 10s before next batch...
+[1;33mBatch 5: Processing 2 dates...[0m
+  [0;34m→[0m Launching job for 2020-01-13...
+  [0;34m→[0m Launching job for 2020-01-14...
+  [1;33m⏳[0m Waiting for batch 5 jobs to complete...
+  \033[0;32m✅\033[0m 2020-01-13 completed successfully
+  \033[0;32m✅\033[0m 2020-01-14 completed successfully
+  [0;32m✅[0m Batch 5 completed in 116s
+
+[0;34m================================================[0m
+[0;34mPerformance Test Complete![0m
+[0;34m================================================[0m
+
+Total Duration: [0;32m769s (12.81m)[0m
+Days Processed: [0;32m14[0m
+Average per Day: [0;32m54.92s[0m
+
+[1;33m📊 Next Steps:[0m
+
+1. View execution logs:
+date: illegal option -- d
+usage: date [-jnRu] [-I[date|hours|minutes|seconds]] [-f input_fmt]
+            [-r filename|seconds] [-v[+|-]val[y|m|w|d|H|M|S]]
+            [[[[mm]dd]HH]MM[[cc]yy][.SS] | new_date] [+output_fmt]
+   gcloud logging read 'resource.type=cloud_run_job AND resource.labels.job_name=extractor-tnp AND timestamp>=""' --limit=500 --format=json --project=chicago-bi-app-msds-432-476520
+
+2. Check BigQuery for data:
+   bq query --use_legacy_sql=false "SELECT DATE(trip_start_timestamp) AS date, COUNT(*) as trips FROM \`chicago-bi-app-msds-432-476520.raw_data.raw_tnp_trips\` WHERE DATE(trip_start_timestamp) BETWEEN '2020-01-01' AND '2020-01-14' GROUP BY date ORDER BY date"
+
+3. Analyze performance metrics:
+   grep 'Duration\|trips' performance_test_20251101_100828.log
+
+[0;32m✅ Performance test completed! Log saved to: performance_test_20251101_100828.log[0m

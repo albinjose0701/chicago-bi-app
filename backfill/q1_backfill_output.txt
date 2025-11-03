@@ -1,0 +1,30 @@
+[0;34m================================================[0m
+[0;34mChicago BI App - Q1 2020 Quarterly Backfill v2.1.0[0m
+[0;34m================================================[0m
+
+Quarter: [0;32mQ1 2020 (Jan 1 - Mar 31)[0m
+Partitions: [0;32m90 daily partitions[0m
+Dataset: [0;32mall[0m
+Project: [0;32mchicago-bi-app-msds-432-476520[0m
+
+
+[0;34m================================================[0m
+[0;34mPre-Flight Checks[0m
+[0;34m================================================[0m
+
+[0;32m✅ gcloud CLI found[0m
+[0;32m✅ bq CLI found[0m
+[0;32m✅ Authenticated to GCP[0m
+[0;32m✅ Project chicago-bi-app-msds-432-476520 exists[0m
+[0;32m✅ Project set to chicago-bi-app-msds-432-476520[0m
+[0;32m✅ Dataset validation passed[0m
+[0;32m✅ Cloud Run job 'extractor-taxi' found[0m
+[0;32m✅ Cloud Run job 'extractor-tnp' found[0m
+[0;32m✅ BigQuery table 'raw_data.raw_taxi_trips' found[0m
+[0;32m✅ BigQuery table 'raw_data.raw_tnp_trips' found[0m
+
+[1;33m⚠️  WARNING: This will execute Cloud Run jobs for 90 days of data.[0m
+[1;33m   Each extraction will be verified for data completeness.[0m
+[1;33m   Estimated cost: ~$3-4 (one-time)[0m
+[1;33m   Estimated time: ~90 minutes per dataset[0m
+
