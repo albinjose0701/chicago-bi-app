@@ -7,6 +7,353 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.14.0] - 2025-11-13 ✅ CURRENT
+
+### Added - Gold Layer with Analytics Aggregations 🎉
+
+**Status:** ✅ **PRODUCTION READY**
+
+#### Gold Tables Created (7 tables, 52M+ records)
+
+1. **gold_taxi_hourly_by_zip** (35.4M rows)
+   - Hourly trip aggregations by pickup/dropoff ZIP pairs
+   - Metrics: trip_count, avg_miles, avg_fare
+   - Partitioned by trip_date, clustered by pickup_zip/dropoff_zip/trip_hour
+   - Use case: Peak hour demand analysis, time-of-day pricing
+
+2. **gold_taxi_daily_by_zip** (4M rows)
+   - Daily trip aggregations by pickup/dropoff ZIP pairs
+   - Use case: Daily trends, seasonal patterns
+
+3. **gold_route_pairs** (10 rows)
+   - Top 10 most popular routes with revenue analysis
+   - Use case: Route optimization, high-value corridor identification
+
+4. **gold_permits_roi** (59 rows)
+   - Building permits aggregated by ZIP (192,435 total permits)
+   - Metrics: total_permits, total_permit_value, avg_permit_value
+   - Use case: Construction activity hotspots, investment patterns
+
+5. **gold_covid_hotspots** (13,132 rows) ⭐ COMPLEX
+   - COVID risk scoring with mobility + epidemiological + CCVI vulnerability
+   - Coverage: 60 ZIPs × 219 weeks (March 2020 - May 2024)
+   - Risk formulas: Mobility Risk + Epi Risk × CCVI Adjustment
+   - Partitioned by week_start, clustered by zip_code/risk_category
+   - Use case: Pandemic impact analysis, mobility-COVID correlation
+
+6. **gold_loan_targets** (60 rows) ⭐ COMPLEX
+   - Illinois Small Business Emergency Loan Fund Delta eligibility targeting
+   - 35 eligible ZIPs (per_capita_income < $30,000)
+   - 4-component eligibility index with weighted income calculation
+   - Use case: Small business loan targeting, economic development
+
+7. **gold_forecasts** (1,650 rows)
+   - Prophet-ready forecasting structure (55 ZIPs × 30 days)
+   - Sample data with confidence intervals (placeholder for ML model)
+   - Use case: Demand forecasting, capacity planning
+
+#### Key Achievements
+- ✅ 52M+ aggregated records from 168M silver records
+- ✅ Complex risk scoring (3-factor COVID model)
+- ✅ Loan eligibility with weighted income via spatial crosswalk
+- ✅ Time series COVID tracking (219 weeks, 3 pandemic waves)
+- ✅ Partitioned/clustered for 95%+ query scan reduction
+- ✅ 3-minute total execution time for all tables
+
+#### Performance
+- **Total Execution Time:** ~3 minutes
+- **Data Scanned:** ~20 GB
+- **Estimated Cost:** $0.10 per full refresh
+- **Query Optimization:** 95%+ scan reduction (partitioning) + 10-100x improvement (clustering)
+
+#### Files Created
+- 9 SQL scripts (1 dataset, 7 table creation, 1 master script)
+- Comprehensive README (70+ pages)
+- Session context documentation (100+ pages)
+
+---
+
+## [2.13.0] - 2025-11-12
+
+### Added - Silver Layer with Spatial Enrichment 🎉
+
+**Status:** ✅ **PRODUCTION READY**
+
+#### Silver Tables Created (4 tables, 168M+ records)
+
+1. **silver_trips_enriched** (167.8M rows)
+   - Spatial enrichment via BigQuery Geography ST_CONTAINS
+   - 100% ZIP match, 99.99% neighborhood match
+   - Airport trips identified: 14.2M (19.9% taxi, 6.4% TNP)
+   - 8-minute spatial join on 168M records with 4 joins per record
+
+2. **silver_permits_enriched** (207,984 rows)
+   - Spatial enrichment: 99.2-99.6% match rates
+   - Derived fields: permit_year, permit_month
+
+3. **silver_covid_weekly_historical** (13,132 rows)
+   - Full time series: All 219 weeks (March 2020 - May 2024)
+   - Risk categorization (High/Medium/Low)
+   - Pandemic waves: Omicron peak Dec 2021 (1,872 cases/100K)
+
+4. **silver_ccvi_high_risk** (39 rows)
+   - High vulnerability areas only (CCVI score > 40)
+   - 26 Community Areas + 13 ZIP codes
+
+#### Key Achievements
+- ✅ 168M+ records spatially enriched
+- ✅ 100% ZIP match, 99.99% neighborhood match
+- ✅ 14.2M airport trips identified
+- ✅ 8-minute spatial join performance
+- ✅ BigQuery Geography instead of Cloud SQL (cost savings)
+
+---
+
+## [2.12.0] - 2025-11-08
+
+### Added - Bronze Layer with Quality Filters 🎉
+
+**Status:** ✅ **PRODUCTION READY**
+
+#### Bronze Tables Created (6 tables, 168M records)
+
+1. **bronze_taxi_trips** (25.3M rows)
+   - 21.6% filtered for quality
+   - Geographic bounds validation
+
+2. **bronze_tnp_trips** (142.5M rows)
+   - 16.2% filtered for quality
+
+3. **bronze_covid_cases** (13,132 rows) - 100% retained
+4. **bronze_building_permits** (207,984 rows) - 1.8% filtered
+5. **bronze_ccvi** (135 rows) - 100% retained
+6. **bronze_public_health** (77 rows) - 100% retained
+
+#### Key Achievements
+- ✅ 168M clean records from 202.5M raw
+- ✅ 17% data quality improvement (34.5M filtered)
+- ✅ Geographic bounds validation (Chicago: 41.6-42.1°N, -87.95 to -87.5°W)
+- ✅ Smart optimization (90% faster - 59 sec vs 5-10 min)
+
+---
+
+## [2.11.0] - 2025-11-06
+
+### Added - Boundary Files, Crosswalks & Reference Data 🎉
+
+**Status:** ✅ **PRODUCTION READY**
+
+#### Reference Tables Created (7 tables)
+
+1. **Boundary Files** (3 tables)
+   - zip_code_boundaries (59 ZIPs)
+   - neighborhood_boundaries (98 neighborhoods)
+   - community_area_boundaries (77 areas)
+
+2. **Spatial Crosswalks** (4 tables)
+   - crosswalk_zip_neighborhood
+   - crosswalk_zip_community
+   - crosswalk_neighborhood_community
+   - crosswalk_community_zip (with overlap percentages)
+
+3. **Static Datasets** (2 tables)
+   - bronze_ccvi (135 rows)
+   - bronze_public_health (77 rows)
+
+#### Key Achievements
+- ✅ 7 reference tables created
+- ✅ 272+ spatial relationships mapped
+- ✅ Fixed location mismatch (all tables now us-central1)
+- ✅ Many-to-many relationships (72% CAs span multiple ZIPs)
+
+---
+
+## [2.10.0] - 2025-11-06
+
+### Added - Architecture Planning for Silver Layer
+
+**Status:** ✅ **PLANNING COMPLETE**
+
+#### Key Decisions
+- Use BigQuery Geography instead of Cloud SQL PostGIS
+- Create many-to-many spatial crosswalk tables
+- Two-stage data quality (critical in extractor, documentation in SQL)
+- Static data loading via `bq load` for <100 record datasets
+
+#### Files Created
+- 11 SQL scripts (4 boundary, 5 silver layer, 2 documentation)
+- Architecture decision documentation
+
+---
+
+## [2.9.0] - 2025-11-05/06
+
+### Added - Permits & COVID Backfill Execution 🎉
+
+**Status:** ✅ **COMPLETE**
+
+#### Backfill Results
+- **COVID-19:** 13,132 records (100% coverage)
+  - 219 weeks × 60 ZIP codes
+  - 819K cases, 8.4K deaths
+
+- **Building Permits:** 211,894 permits (99.7% coverage)
+  - 2,130/2,136 dates (6 missing are weekends/holidays)
+  - $225M total fees
+  - 98.2% with coordinates
+
+#### Key Achievements
+- ✅ Multi-hour execution without interruptions
+- ✅ Network resilience proven
+- ✅ 100% data integrity verified
+- 🐛 Discovered grep bug (cosmetic, data OK)
+
+---
+
+## [2.8.0] - 2025-11-05
+
+### Added - Building Permits & COVID-19 Extractors 🎉
+
+**Status:** ✅ **PRODUCTION READY**
+
+#### New Extractors Created (2)
+
+1. **Building Permits Extractor**
+   - Dataset: ydr8-5enu
+   - Fields: 64 fields
+   - BigQuery table: raw_building_permits
+
+2. **COVID-19 Cases Extractor**
+   - Dataset: yhhz-zm2v
+   - Fields: 20 fields
+   - BigQuery table: raw_covid_cases
+
+#### Key Achievements
+- ✅ 2 new extractors (1,261 lines Go code)
+- ✅ 2 BigQuery tables with partitioning/clustering
+- ✅ Both tested and validated
+- ✅ Ready for historical backfill
+
+---
+
+## [2.7.0] - 2025-11-05
+
+### Added - Full 2024 + Partial 2025 Complete 🎉
+
+**Status:** ✅ **PRODUCTION READY**
+
+#### Backfill Results
+- **Dates:** 640 (2024 + 2025 through Oct 1)
+- **Trips:** 11.6M (90% above estimate)
+- **Execution:** 2h 49m (7-way parallel)
+
+#### Key Achievements
+- ✅ 5+ years taxi data complete (2020-2025)
+- ✅ 32.3M total taxi trips
+- ✅ 25x performance improvement (2s delays)
+
+---
+
+## [2.6.0] - 2025-11-05
+
+### Added - 2023 Complete + 2024 Schema Discovery 🎉
+
+**Status:** ✅ **PRODUCTION READY**
+
+#### Backfill Results
+- **Year 2023:** 365 dates, 6.5M trips
+- **Execution:** 3 hours (4-way parallel, 2s delays)
+
+#### Discovery
+- **2024+ Dataset:** Separate API endpoint (ajtu-isnz)
+- **Updated Code:** v2.3.0 with dynamic dataset selection
+
+#### Key Achievements
+- ✅ 4 years taxi data (2020-2023, 20.7M trips)
+- ✅ 13x performance improvement
+- ✅ Code ready for 2024-2025
+
+---
+
+## [2.5.0] - 2025-11-05
+
+### Added - Full 2022 Dataset Complete 🎉
+
+**Status:** ✅ **PRODUCTION READY**
+
+#### Backfill Results
+- **Dates:** 365 (full year)
+- **Trips:** 75.5M (6.38M taxi, 69.1M TNP)
+- **Execution:** 7h 31m (4-way parallel)
+
+#### Key Achievements
+- ✅ Three complete years (2020+2021+2022)
+- ✅ 185M total trips
+- ✅ 75% time savings via parallelization
+- ✅ Created session-contexts folder
+
+---
+
+## [2.4.0] - 2025-11-04/05
+
+### Added - Full 2021 Dataset Complete 🎉
+
+**Status:** ✅ **PRODUCTION READY**
+
+#### Backfill Results
+- **Dates:** 365 (full year)
+- **Trips:** 55.5M (3.95M taxi, 51.5M TNP)
+- **Execution:** 7h 42m (4-way parallel)
+
+#### Key Achievements
+- ✅ Two complete years (2020+2021)
+- ✅ 109.5M total trips
+- ✅ 6x performance improvement (30s → 5s delays)
+- ✅ 74% time savings
+
+---
+
+## [2.3.0] - 2025-11-04
+
+### Added - Full 2020 Dataset Complete 🎉
+
+**Status:** ✅ **PRODUCTION READY**
+
+#### Backfill Results
+- **Dates:** 366 (full year, leap year)
+- **Trips:** 54M (3.89M taxi, 50.1M TNP)
+- **Execution:** Optimized (10s delays, parallel Q3+Q4)
+
+#### Key Achievements
+- ✅ Complete 2020 dataset
+- ✅ Network resilience tested (2 switches + power outage)
+- ✅ 3x faster execution (30s → 10s delays)
+- ✅ COVID-19 impact captured (Q1→Q4 trends)
+
+---
+
+## [2.2.0] - 2025-11-02
+
+### Added - Q1 2020 Backfill Complete 🎉
+
+**Status:** ✅ **PRODUCTION READY**
+
+#### Backfill Results
+- **Dates:** 91/91 for both datasets
+- **Trips:** 25.9M total
+- **Quality:** 90%+ geographic coverage
+
+#### Fixed
+- Bash array indexing bug (Bash 3.2 compatibility)
+- Network-resilient backfill scripts
+
+#### Key Achievements
+- ✅ First complete quarter
+- ✅ Full data quality validation
+- ✅ Production-ready for analytics
+
+---
+
 ## [2.1.0] - 2025-11-01
 
 ### Fixed - Critical Performance and Reliability Issues

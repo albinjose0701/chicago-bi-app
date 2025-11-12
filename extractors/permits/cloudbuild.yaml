@@ -1,0 +1,18 @@
+steps:
+  # Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/chicago-bi-app-msds-432-476520/extractor-permits:v1.0.0'
+      - '-t'
+      - 'gcr.io/chicago-bi-app-msds-432-476520/extractor-permits:latest'
+      - '.'
+
+images:
+  - 'gcr.io/chicago-bi-app-msds-432-476520/extractor-permits:v1.0.0'
+  - 'gcr.io/chicago-bi-app-msds-432-476520/extractor-permits:latest'
+
+options:
+  machineType: 'N1_HIGHCPU_8'
+  logging: CLOUD_LOGGING_ONLY
