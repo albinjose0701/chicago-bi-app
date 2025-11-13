@@ -7,7 +7,81 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [2.14.0] - 2025-11-13 ✅ CURRENT
+## [2.16.0] - 2025-11-13 ✅ CURRENT
+
+### Added - October 2025 Incremental Data Update 🎉
+
+**Status:** ✅ **PRODUCTION READY - ALL LAYERS UPDATED**
+
+#### October 2025 Data Pipeline Execution
+
+**Incremental Update Strategy:**
+- Used DELETE + INSERT pattern for efficient updates (vs full table recreation)
+- Updated only October 2025 data across all layers
+- Maintained data integrity with 100% validation
+
+#### Extraction Results
+- **Dates Extracted:** 31 days (Oct 1-31, 2025)
+- **Raw Trips:** 633,096 taxi trips
+- **Method:** 4-way parallel extraction with Cloud Run Jobs
+- **Execution Time:** ~7 minutes (4x speedup vs sequential)
+- **Script:** `parallel_october_5_31.sh` with 3-second delays
+
+#### Layer Updates
+
+1. **Bronze Layer** (532,333 trips)
+   - DELETE + INSERT October 2025 data
+   - Quality filtering: 84.1% retention rate
+   - Geographic bounds validation applied
+   - Execution time: ~5 seconds
+
+2. **Silver Layer** (532,333 trips)
+   - Spatial enrichment with ZIP codes and neighborhoods
+   - ST_CONTAINS joins with reference boundaries
+   - 100% spatial enrichment success
+   - Execution time: ~17 seconds
+
+3. **Gold Hourly Aggregations** (162,655 records)
+   - Hourly trip counts by pickup/dropoff ZIP pairs
+   - Updated `gold_taxi_hourly_by_zip` table
+   - Execution time: ~5 seconds
+
+4. **Gold Daily Aggregations** (33,409 records)
+   - Daily trip counts by pickup/dropoff ZIP pairs
+   - Updated `gold_taxi_daily_by_zip` table
+   - Execution time: ~3 seconds
+
+#### Key Achievements
+- ✅ 633K raw trips extracted in ~7 minutes (parallel execution)
+- ✅ 532K trips processed through all layers in ~30 seconds (incremental updates)
+- ✅ 100% data integrity verified (aggregations sum to source data)
+- ✅ 10x faster processing vs full table recreation
+- ✅ Created reusable incremental update pattern for future months
+
+#### Performance Metrics
+- **Total Pipeline Time:** ~15 minutes end-to-end
+  - Extraction: ~7 minutes (4-way parallel)
+  - Processing: ~30 seconds (incremental updates)
+  - Verification: ~7-8 minutes (monitoring)
+- **Data Quality:** 84.1% retention after quality filtering
+- **Spatial Enrichment:** 100% success rate
+- **Cost:** <$0.50 for full extraction + processing
+
+#### Files Created
+- `backfill/parallel_october_5_31.sh` - 4-way parallel extraction script
+- `backfill/incremental_update_october.sh` - Incremental layer updates
+- `backfill/october_2025_taxi_backfill.sh` - Sequential script (deprecated)
+- Session context: `v2.16.0_SESSION_2025-11-13_OCTOBER_2025_INCREMENTAL_UPDATE.md`
+
+#### Updated Data Coverage
+- **Taxi Trips:** 2020-01-01 through 2025-10-31 (complete)
+- **Total Taxi Trips:** 25.8M+ trips across 5+ years
+- **Latest Data:** October 2025 (633K raw, 532K processed)
+- **Data Currency:** ✅ Up-to-date through October 31, 2025
+
+---
+
+## [2.14.0] - 2025-11-13
 
 ### Added - Gold Layer with Analytics Aggregations 🎉
 
