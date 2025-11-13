@@ -20,8 +20,11 @@ import (
 )
 
 const (
-	// Chicago Data Portal API endpoint for Taxi Trips
-	baseURL = "https://data.cityofchicago.org/resource/wrvz-psew.json"
+	// Chicago Data Portal API endpoints for Taxi Trips
+	// 2020-2023 dataset
+	baseURL2020to2023 = "https://data.cityofchicago.org/resource/wrvz-psew.json"
+	// 2024+ dataset (new schema with numeric community areas)
+	baseURL2024Plus = "https://data.cityofchicago.org/resource/ajtu-isnz.json"
 
 	// Batch size for pagination
 	batchSize = 50000
@@ -61,9 +64,10 @@ type TaxiTrip struct {
 	Extras    float64 `json:"extras,omitempty,string" bigquery:"extras"`
 	TripTotal float64 `json:"trip_total,omitempty,string" bigquery:"trip_total"`
 
-	// Community area - strings (IDs as strings) - omitempty removed to preserve empty values
-	PickupCommunityArea  string `json:"pickup_community_area" bigquery:"pickup_community_area"`
-	DropoffCommunityArea string `json:"dropoff_community_area" bigquery:"dropoff_community_area"`
+	// Community area - flexible type to handle both string (2020-2023) and number (2024+)
+	// Stored as string in BigQuery for backward compatibility
+	PickupCommunityArea  CommunityArea `json:"pickup_community_area" bigquery:"pickup_community_area"`
+	DropoffCommunityArea CommunityArea `json:"dropoff_community_area" bigquery:"dropoff_community_area"`
 
 	// Census tract fields - omitempty removed to preserve empty values
 	PickupCensusTract  string `json:"pickup_census_tract" bigquery:"pickup_census_tract"`
@@ -78,6 +82,50 @@ type TaxiTrip struct {
 	// Point fields (geospatial - excluded from JSON output and BigQuery)
 	PickupCentroidLocation  interface{} `json:"-" bigquery:"-"`
 	DropoffCentroidLocation interface{} `json:"-" bigquery:"-"`
+}
+
+// CommunityArea is a custom type that handles both string (2020-2023) and number (2024+) formats
+// from the Socrata API, storing as string in BigQuery for backward compatibility
+type CommunityArea struct {
+	Value string
+}
+
+// UnmarshalJSON implements custom JSON unmarshaling to handle both string and number
+func (ca *CommunityArea) UnmarshalJSON(data []byte) error {
+	// Try to unmarshal as string first
+	var s string
+	if err := json.Unmarshal(data, &s); err == nil {
+		ca.Value = s
+		return nil
+	}
+
+	// Try to unmarshal as float64 (JSON numbers are float64)
+	var f float64
+	if err := json.Unmarshal(data, &f); err == nil {
+		// Convert to string, removing decimal if it's a whole number
+		if f == 0 {
+			ca.Value = ""
+		} else if f == float64(int(f)) {
+			ca.Value = fmt.Sprintf("%.0f", f)
+		} else {
+			ca.Value = fmt.Sprintf("%f", f)
+		}
+		return nil
+	}
+
+	// If both fail, set to empty string
+	ca.Value = ""
+	return nil
+}
+
+// MarshalJSON implements custom JSON marshaling (output as string)
+func (ca CommunityArea) MarshalJSON() ([]byte, error) {
+	return json.Marshal(ca.Value)
+}
+
+// String returns the string value for BigQuery
+func (ca CommunityArea) String() string {
+	return ca.Value
 }
 
 type ExtractorConfig struct {
@@ -116,7 +164,7 @@ func main() {
 	ctx := context.Background()
 
 	log.Println("========================================")
-	log.Println("🚕 Chicago Taxi Trips Extractor v2.1.3")
+	log.Println("🚕 Chicago Taxi Trips Extractor v2.3.0")
 	log.Println("========================================")
 
 	// Load Socrata API credentials from Secret Manager
@@ -334,6 +382,19 @@ func extractAllDataConcurrent(ctx context.Context, config ExtractorConfig) ([]Ta
 	return allTrips, nil
 }
 
+// getBaseURL returns the correct API endpoint based on the extraction year
+// 2020-2023 uses dataset wrvz-psew, 2024+ uses dataset ajtu-isnz
+func getBaseURL(startDate string) string {
+	// Extract year from YYYY-MM-DD format
+	if len(startDate) >= 4 {
+		year := startDate[:4]
+		if year >= "2024" {
+			return baseURL2024Plus
+		}
+	}
+	return baseURL2020to2023
+}
+
 func buildQueryWithOffset(config ExtractorConfig, offset int) string {
 	// Build SoQL query - extract all data for the date
 	// Data quality filters will be applied in BigQuery after loading
@@ -344,6 +405,8 @@ func buildQueryWithOffset(config ExtractorConfig, offset int) string {
 		getNextDay(config.StartDate),
 	)
 
+	// Use correct API endpoint based on extraction year
+	baseURL := getBaseURL(config.StartDate)
 	return fmt.Sprintf("%s?$where=%s&$limit=%d&$offset=%d", baseURL, url.QueryEscape(whereClause), batchSize, offset)
 }
 
