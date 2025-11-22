@@ -1,0 +1,28 @@
+# Cloud Build configuration for Building Permits Pipeline
+# Builds and pushes the container image to Container Registry
+
+steps:
+  # Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/chicago-bi-app-msds-432-476520/permits-pipeline:latest'
+      - '.'
+
+  # Push the image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/chicago-bi-app-msds-432-476520/permits-pipeline:latest'
+
+# Store images in Container Registry
+images:
+  - 'gcr.io/chicago-bi-app-msds-432-476520/permits-pipeline:latest'
+
+# Build timeout
+timeout: 1200s
+
+# Build options
+options:
+  logging: CLOUD_LOGGING_ONLY
