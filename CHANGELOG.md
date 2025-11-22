@@ -7,7 +7,270 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [2.19.0] - 2025-11-14 ✅ CURRENT
+## [2.22.0] - 2025-11-22 ✅ CURRENT
+
+### Added - Dashboard 3 (CCVI Vulnerable Communities) Complete - ALL 5 DASHBOARDS FINISHED 🎉
+
+**Status:** ✅ **100% COMPLETE - ALL 5 DASHBOARDS BUILT (30 VISUALIZATIONS)**
+
+#### Dashboard 3: CCVI Vulnerable Communities
+- **Visualizations:** 6 of 6 complete (100%)
+- **BigQuery Views Created:** 6 new views in `gold_data`
+  1. `v_ccvi_map` (135 rows) - CCVI vulnerability map (77 CAs + 58 ZIPs)
+  2. `v_ccvi_trip_activity` (77 rows) - Trip volumes by CCVI category
+  3. `v_ccvi_double_burden` (58 rows) - Areas with High CCVI + High COVID
+  4. `v_ccvi_trip_trends` (365 rows) - Weekly trip trends by CCVI category
+  5. `v_ccvi_pooled_rides` (77 rows) - Pooled ride analysis by CA
+  6. `v_ccvi_dashboard_summary` (1 row) - 18 KPI summary metrics
+
+#### Key Fixes Implemented
+1. **Expanded from HIGH-only to ALL CCVI Categories:**
+   - Original: 39 areas (HIGH only)
+   - Updated: 135 areas (HIGH: 39, MEDIUM: 41, LOW: 55)
+
+2. **Fixed Burden Category Thresholds:**
+   - Issue: All showing "Elevated" (thresholds assumed 0-100 scale)
+   - Fix: avg_risk_score was 0-1 scale, updated thresholds to 0.30, 0.15, 0.10
+   - Result: Critical (5), Severe (7), High (12), Moderate (5), Low (29)
+
+3. **Added Summary View Fields:**
+   - Original: 13 fields
+   - Updated: 18 fields including CA/ZIP breakdowns, trip stats, COVID stats
+
+#### Dashboard 3 Key Metrics
+- Total CCVI Areas: 135
+- High Risk CAs: 26 / High Risk ZIPs: 13
+- Trips to High CCVI Areas: 34.9M
+- COVID Cases: 819,185 / Deaths: 8,361
+
+#### Complete Dashboard Status
+| Dashboard | Visualizations | Status |
+|-----------|---------------|--------|
+| 1. COVID-19 Alerts & Safety | 6/6 | ✅ 100% |
+| 2. Airport Traffic Analysis | 5/5 | ✅ 100% |
+| 3. Vulnerable Communities (CCVI) | 6/6 | ✅ 100% |
+| 4. Traffic Forecasting & Construction | 7/7 | ✅ 100% |
+| 5. Economic Development & Investment | 6/6 | ✅ 100% |
+| **TOTAL** | **30** | **✅ 100%** |
+
+#### Files Created
+- `dashboards/queries/create_dashboard_3_views.sql`
+- `dashboards/DASHBOARD_3_BUILD_GUIDE.md`
+
+---
+
+## [2.21.3] - 2025-11-22
+
+### Added - Dashboard 5 (Economic Development) Complete 🎉
+
+**Status:** ✅ **Dashboard 5 Complete (4 of 5 Dashboards Done)**
+
+#### Dashboard 5: Economic Development & Investment
+- **Visualizations:** 6 of 6 complete (100%)
+- **Data Sources:** 5 BigQuery views verified and connected
+
+#### BigQuery View Updates
+1. **v_permits_timeline:** Added `permit_id` field for counting
+2. **v_economic_dashboard:** Added `priority_score` for map coloring (1-4 numeric scale)
+
+#### Looker Studio Issues Resolved
+1. **COUNT(permit_id) showing 0:** Added `id AS permit_id` to view
+2. **Record Count flat line:** Scale mismatch (100 vs 500M) - used dual Y-axis
+3. **Map color customization:** Looker Studio limitation for categorical dimensions - added numeric priority_score field
+
+#### Dashboard 5 Visualizations
+1. ✅ Investment Targets Map - investment_need_score heatmap
+2. ✅ Permit Timeline - Monthly trends with permit counts
+3. ✅ Loan Eligibility Map - Priority score coloring (1-4)
+4. ✅ Income vs Construction Scatter - Bubble sizing by population
+5. ✅ Fee Distribution Bar - Top 15 ZIPs by fees
+6. ✅ Monthly Trends Combo - Permits bars + cumulative line
+
+---
+
+## [2.21.2] - 2025-11-21
+
+### Added - Permits Pipeline Cloud Run Deployment 🎉
+
+**Status:** ✅ **FULL AUTOMATION DEPLOYED AND TESTED**
+
+#### Cloud Run Deployment
+- **Docker Image:** `gcr.io/chicago-bi-app-msds-432-476520/permits-pipeline:latest`
+- **Cloud Run Job:** `permits-pipeline`
+  - Memory: 1 GB, CPU: 1 vCPU
+  - Timeout: 10 minutes
+  - Max retries: 1
+- **Test Execution:** SUCCESS (6.17 seconds)
+
+#### Cloud Scheduler Setup
+- **Job Name:** `permits-pipeline-weekly`
+- **Schedule:** Every Monday at 3:00 AM CT (9:00 AM UTC)
+- **Cron:** `0 9 * * 1`
+- **Status:** ENABLED
+
+#### Deployment Issues Resolved
+1. **$SHORT_SHA substitution error:** Simplified to use only `latest` tag
+2. **E2_HIGHCPU_8 quota restriction:** Removed machine type specification
+3. **Cloud Run job UPDATE failed:** Separated build from deployment
+
+#### Cost Analysis
+- Pipeline execution: ~$0.01 per run
+- Cloud Scheduler: $0.10/month
+- **Total Annual Cost:** ~$3.60/year
+
+#### Documentation Created
+- `dashboards/LOOKER_STUDIO_AUTO_REFRESH_GUIDE.md` (850+ lines)
+- `transformations/permits/AUTOMATION_GUIDE.md` (950+ lines)
+- `transformations/permits/QUICK_START.md` (250+ lines)
+
+---
+
+## [2.21.1] - 2025-11-21
+
+### Added - Permits Pipeline Automation Complete 🎉
+
+**Status:** ✅ **Pipeline Tested Locally (9.5 seconds)**
+
+#### Pipeline Components
+- **Python orchestration script:** `run_pipeline.py` (303 lines)
+- **Dockerfile:** Production-ready with Python 3.11-slim
+- **cloudbuild.yaml:** Cloud Build configuration
+- **deploy.sh:** Interactive deployment script
+
+#### Local Test Results
+- Bronze MERGE: ~3 seconds
+- Silver MERGE: ~4 seconds
+- Gold DELETE+INSERT: ~2 seconds
+- **Total: 9.5 seconds**
+
+---
+
+## [2.21.0] - 2025-11-21
+
+### Added - Building Permits Pipeline Automation Design 🎉
+
+**Status:** ✅ **Pipeline Design Complete, Ready for Testing**
+
+#### Incremental Pipeline Architecture
+- **Bronze Layer:** MERGE-based incremental updates with deduplication
+- **Silver Layer:** MERGE with spatial enrichment (ZIP, neighborhood)
+- **Gold Layer:** DELETE + INSERT for aggregate refresh
+
+#### SQL Transformations Created
+- `01_bronze_permits_incremental.sql` (143 lines)
+- `02_silver_permits_incremental.sql` (157 lines)
+- `03_gold_permits_aggregates.sql` (304 lines)
+
+#### Dashboard 5 BigQuery Views Created (5 views)
+1. `v_economic_dashboard` (58 ZIPs) - Investment targets, loan eligibility
+2. `v_permits_timeline` (7,935 permits) - Time series data
+3. `v_permits_by_area` (60 ZIPs) - Aggregated metrics
+4. `v_monthly_permit_summary` (71 months) - Monthly trends
+5. `v_fee_analysis` (59 ZIPs) - Fee distribution
+
+#### Dashboard 5 Build Guides
+- `DASHBOARD_5_BUILD_GUIDE.md` (850+ lines)
+- `DASHBOARD_5_QUICK_REFERENCE.md` (150 lines)
+
+---
+
+## [2.20.3] - 2025-11-21
+
+### Added - Dashboard 2 & Rush Hour Visualization Complete 🎉
+
+**Status:** ✅ **Dashboard 4 (100%) and Dashboard 2 (100%) Complete**
+
+#### Dashboard 4: Rush Hour Heatmap (Viz 7)
+- **Design:** Small multiples (16 maps total)
+- **Time Windows:** 8 periods (5-7 AM through 2-4 AM)
+- **Day Buckets:** Weekday (M-T-W-Th) vs Weekend (F-Sa-Su)
+- **Color Scale:** 0-1000 for valid weekday/weekend comparison
+
+#### IQR Statistical Analysis
+- Weekday Peak: 7-9 AM morning rush (max limit 994)
+- Weekend Peak: 4-6 PM evening leisure (max limit 527)
+- Weekday 4.7x busier than weekend at 7-9 AM
+
+#### Dashboard 2: Airport Traffic Analysis
+- **Visualizations:** 5 of 5 complete (100%)
+- **BigQuery Views Created:**
+  1. `v_airport_trips` (9.2M trips: 6.9M O'Hare, 2.1M Midway)
+  2. `v_airport_covid_overlay` (weekly trips + COVID cases)
+  3. `v_airport_hourly_patterns` (last 90 days)
+
+#### Week Start Date Bug Fix
+- **Issue:** COVID cases showing 0 in overlay
+- **Root Cause:** Airport view used WEEK(MONDAY), COVID data uses WEEK(SUNDAY)
+- **Fix:** Changed airport view to WEEK(SUNDAY)
+- **Result:** Pandemic impact now visible (93% traffic drop March 2020)
+
+---
+
+## [2.20.2] - 2025-11-20
+
+### Added - Dashboard 4 Build & Rush Hour Visualization Progress 🎉
+
+**Status:** ✅ **Dashboard 4: 6 of 7 Visualizations Complete**
+
+#### Dashboard 4 Visualizations Built
+1. ✅ ZIP Traffic Heatmap
+2. ✅ Traffic Forecast Line Chart
+3. ✅ Day-of-Week Patterns Bar Chart
+4. ✅ Seasonal Trends Area Chart
+5. ✅ Model Performance Metrics Table
+6. ✅ Monthly Summary Scorecard
+7. 🔄 Rush Hour Heatmap (in progress)
+
+#### IQR-Based Color Scaling
+- Developed statistical approach using Q3 + 1.5×IQR
+- 6-hour period scale: 0-450
+- Removes outlier influence for better color differentiation
+
+---
+
+## [2.20.1] - 2025-11-19
+
+### Added - COVID Forecast Tuning & Dashboard Development 🎉
+
+**Status:** ✅ **COVID Model v1.7.0, Dashboard 1: 50% Complete**
+
+#### COVID Forecast Model Updates
+- Fixed weekly pulse artifact in forecasts
+- Re-trained 56 models with updated parameters
+- Improved forecast smoothness
+
+#### Dashboard 1: COVID Alerts (Partial)
+- Started building in Looker Studio
+- 3 of 6 visualizations complete
+
+---
+
+## [2.20.0] - 2025-11-15
+
+### Added - Dashboard Development Phase Started 🎉
+
+**Status:** ✅ **Dashboard Development Initiated**
+
+#### Dashboard Architecture Designed
+- 5 dashboards with 29 total visualizations
+- Looker Studio selected as BI platform
+- BigQuery direct connections configured
+
+#### Dashboard Specifications
+1. **Dashboard 1:** COVID-19 Alerts & Safety (6 visualizations)
+2. **Dashboard 2:** Airport Traffic Analysis (5 visualizations)
+3. **Dashboard 3:** Vulnerable Communities CCVI (5 visualizations)
+4. **Dashboard 4:** Traffic Forecasting & Construction (7 visualizations)
+5. **Dashboard 5:** Economic Development & Investment (6 visualizations)
+
+#### Files Created
+- `DASHBOARD_IMPLEMENTATION_PLAN.md`
+- `DASHBOARD_READINESS_ANALYSIS.md`
+- `LOOKER_STUDIO_QUICKSTART.md`
+
+---
+
+## [2.19.0] - 2025-11-14
 
 ### Added - COVID-19 Forecasting Production Deployment (Option B) 🎉
 
