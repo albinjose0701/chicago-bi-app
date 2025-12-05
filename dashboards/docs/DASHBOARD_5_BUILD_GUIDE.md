@@ -674,5 +674,5 @@ Add **5 data sources** from BigQuery:
 **Version:** 1.0
 **Last Updated:** November 21, 2025
 **Related Files:**
-- `/Users/albin/Desktop/chicago-bi-app/dashboards/queries/create_dashboard_5_views.sql`
-- `/Users/albin/Desktop/chicago-bi-app/DASHBOARD_IMPLEMENTATION_PLAN.md`
+- `dashboards/queries/create_dashboard_5_views.sql`
+- `dashboards/docs/DASHBOARD_IMPLEMENTATION_PLAN.md`

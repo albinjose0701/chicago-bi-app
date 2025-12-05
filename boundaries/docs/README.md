@@ -18,7 +18,8 @@
 ### Step 1: Load Boundary Files (5 minutes)
 
 ```bash
-cd /Users/albin/Desktop/chicago-bi-app/boundaries
+# From project root
+cd boundaries
 chmod +x 01_load_boundaries.sh
 ./01_load_boundaries.sh
 ```

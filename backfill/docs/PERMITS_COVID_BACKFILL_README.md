@@ -73,7 +73,8 @@ Both scripts feature:
 ### Run Building Permits Backfill
 
 ```bash
-cd /Users/albin/Desktop/chicago-bi-app/backfill
+# From project root
+cd backfill
 ./permits_backfill_2020_2025.sh
 ```
 
@@ -82,7 +83,8 @@ When prompted, type `yes` to confirm and start.
 ### Run COVID-19 Backfill
 
 ```bash
-cd /Users/albin/Desktop/chicago-bi-app/backfill
+# From project root
+cd backfill
 ./covid_backfill_2020_2024.sh
 ```
 
@@ -248,7 +250,8 @@ chmod +x covid_backfill_2020_2024.sh
 gcloud run jobs list --region=us-central1
 
 # If missing, deploy extractors first
-cd /Users/albin/Desktop/chicago-bi-app/extractors/permits
+# From project root
+cd extractors/permits
 gcloud builds submit --config cloudbuild.yaml
 ```
 
@@ -443,8 +446,8 @@ LIMIT 10
 ## 📚 Related Documentation
 
 - **Extractors README:**
-  - `/Users/albin/Desktop/chicago-bi-app/extractors/permits/README.md`
-  - `/Users/albin/Desktop/chicago-bi-app/extractors/covid/README.md`
+  - `extractors/permits/README.md`
+  - `extractors/covid/README.md`
 
 - **Session Context:**
   - `/Users/albin/Desktop/session-contexts/v2.8.0_SESSION_2025-11-05_PERMITS_COVID_EXTRACTORS.md`

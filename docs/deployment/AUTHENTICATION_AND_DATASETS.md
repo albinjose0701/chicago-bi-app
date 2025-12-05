@@ -99,7 +99,8 @@ func extractData(queryURL string) ([]TaxiTrip, error) {
 I've created an authenticated version for you:
 
 ```bash
-cd /Users/albin/Desktop/chicago-bi-app/extractors/taxi
+# From project root
+cd extractors/taxi
 
 # Backup original
 cp main.go main_no_auth.go

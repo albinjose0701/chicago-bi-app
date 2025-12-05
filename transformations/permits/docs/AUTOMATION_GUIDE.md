@@ -75,7 +75,8 @@ Looker Studio Dashboards (auto-refresh every 12 hours)
 From the `transformations/permits` directory:
 
 ```bash
-cd /Users/albin/Desktop/chicago-bi-app/transformations/permits
+# From project root
+cd transformations/permits
 
 # Option A: Automated deployment (recommended)
 ./deploy.sh

@@ -58,7 +58,8 @@ gold_permits_roi + gold_loan_targets
 
 **Run pipeline:**
 ```bash
-cd /Users/albin/Desktop/chicago-bi-app/transformations/permits
+# From project root
+cd transformations/permits
 python3 run_pipeline.py
 ```
 

@@ -280,7 +280,8 @@ All indices use min-max normalization:
 ### Create All Gold Tables
 
 ```bash
-cd ~/Desktop/chicago-bi-app/gold-layer
+# From project root
+cd gold-layer
 ./scripts/00_create_all_gold_tables.sh
 ```
 

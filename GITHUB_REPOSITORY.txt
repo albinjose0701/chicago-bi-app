@@ -1,0 +1,47 @@
+Chicago BI App - GitHub Repository
+====================================
+
+Repository URL: https://github.com/albinjose0701/chicago-bi-app
+
+Project: Chicago Business Intelligence Application
+Version: v2.22.0
+Last Updated: December 5, 2025
+
+---
+
+Quick Links:
+
+- Repository: https://github.com/albinjose0701/chicago-bi-app
+- Clone (SSH): git@github.com:albinjose0701/chicago-bi-app.git
+- Clone (HTTPS): https://github.com/albinjose0701/chicago-bi-app.git
+
+---
+
+Recent Updates:
+
+✅ Complete project reorganization (Dec 5, 2025)
+   - 44+ organized subfolders created
+   - Root directory 77% cleaner
+   - All documentation properly organized
+   - 210 files reorganized
+
+✅ All 5 dashboards complete (Nov 22, 2025)
+   - 30 visualizations built
+   - Dashboard implementation finished
+
+✅ Permits pipeline automation (Nov 21, 2025)
+   - Cloud Run deployment
+   - Cloud Scheduler configured
+
+---
+
+For more information, see:
+- README.md - Project overview
+- CHANGELOG.md - Complete version history
+- docs/START_HERE.md - Getting started guide
+- docs/reference/CURRENT_STATUS_v2.22.0.md - Current status
+- docs/reference/FOLDER_STRUCTURE.md - Folder organization
+
+---
+
+Generated: December 5, 2025

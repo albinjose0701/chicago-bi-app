@@ -15,7 +15,8 @@ All automation code is **production-ready** and tested locally:
 
 ```bash
 # 1. Navigate to permits pipeline directory
-cd /Users/albin/Desktop/chicago-bi-app/transformations/permits
+# From project root
+cd transformations/permits
 
 # 2. Run automated deployment
 ./deploy.sh
@@ -95,7 +96,8 @@ Monday 7 AM → User opens dashboard → Looker auto-queries BigQuery → Fresh 
 
 ```bash
 # Deploy permits pipeline
-cd /Users/albin/Desktop/chicago-bi-app/transformations/permits
+# From project root
+cd transformations/permits
 ./deploy.sh
 ```
 

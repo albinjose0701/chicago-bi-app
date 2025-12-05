@@ -165,7 +165,8 @@ The Bronze layer contains cleaned raw data with quality filters applied. This la
 
 ### Create All Tables
 ```bash
-cd /Users/albin/Desktop/chicago-bi-app/bronze-layer
+# From project root
+cd bronze-layer
 ./scripts/00_create_all_bronze_tables.sh
 ```
 

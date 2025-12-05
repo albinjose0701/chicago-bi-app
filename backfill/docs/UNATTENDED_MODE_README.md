@@ -3,7 +3,8 @@
 ## Quick Start
 
 ```bash
-cd /Users/albin/Desktop/chicago-bi-app/backfill
+# From project root
+cd backfill
 ./start_backfill_unattended.sh
 ```
 
@@ -56,7 +57,8 @@ Two files are created:
 
 ### Watch live progress:
 ```bash
-cd /Users/albin/Desktop/chicago-bi-app/backfill
+# From project root
+cd backfill
 tail -f resume_tnp_resilient_*.log
 ```
 
@@ -78,7 +80,7 @@ bq query --use_legacy_sql=false \
 
 ### Check progress file:
 ```bash
-tail /Users/albin/Desktop/chicago-bi-app/backfill/tnp_progress.txt
+tail backfill/docs/tnp_progress.txt
 ```
 
 ---

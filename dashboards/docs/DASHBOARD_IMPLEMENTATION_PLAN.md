@@ -100,7 +100,7 @@ Datasets:
 
 **File Organization:**
 ```
-/Users/albin/Desktop/chicago-bi-app/dashboards/
+dashboards/
 ├── queries/
 │   ├── covid/           (12 COVID queries)
 │   ├── traffic/         (10 traffic queries)

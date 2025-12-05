@@ -351,7 +351,7 @@ chicago-bi-app/
 **Term:** Fall 2025
 
 **GCP Project:** chicago-bi-app-msds-432-476520
-**Documentation:** `/Users/albin/Desktop/chicago-bi-app/`
+**Documentation:** Project root directory
 **Context Files:** `/Users/albin/Desktop/context/`
 
 ---

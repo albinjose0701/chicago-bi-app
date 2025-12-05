@@ -8,7 +8,8 @@ This module implements Prophet time series forecasting models to meet project re
 
 ```bash
 # Activate virtual environment
-cd /Users/albin/Desktop/chicago-bi-app/forecasting
+# From project root
+cd forecasting
 source venv/bin/activate
 
 # Run Traffic Forecasting (57 ZIPs, 90-day horizon)

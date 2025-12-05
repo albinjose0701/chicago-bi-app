@@ -26,7 +26,7 @@ yourname@cloudshell:~ (chicago-bi-app-msds-432-476520)$
 
 1. In Cloud Shell, click the **⋮** (three dots) menu in the top-right
 2. Select **Upload**
-3. Navigate to: `/Users/albin/Desktop/chicago-bi-app/backfill/`
+3. Navigate to the backfill directory from project root: `cd backfill/`
 4. Select `quarterly_backfill_q1_2020.sh`
 5. Click **Upload**
 
