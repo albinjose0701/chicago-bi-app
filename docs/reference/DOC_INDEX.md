@@ -8,7 +8,7 @@
 
 ## Quick Navigation
 
-- **Getting Started:** [START_HERE.md](#start_heremd) → [DEPLOYMENT_GUIDE.md](#deployment_guidemd)
+- **Getting Started:** [docs/START_HERE.md](#start_heremd) → [DEPLOYMENT_GUIDE.md](#deployment_guidemd)
 - **Architecture:** [README.md](#readmemd) → [ARCHITECTURE_GAP_ANALYSIS.md](#architecture_gap_analysismd)
 - **Versioning:** [CHANGELOG.md](#changelogmd) → [VERSIONS.md](#versionsmd)
 - **Implementation:** [FINAL_IMPLEMENTATION_PLAN.md](#final_implementation_planmd)

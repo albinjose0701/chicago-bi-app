@@ -166,13 +166,13 @@ The Bronze layer contains cleaned raw data with quality filters applied. This la
 ### Create All Tables
 ```bash
 cd /Users/albin/Desktop/chicago-bi-app/bronze-layer
-./00_create_all_bronze_tables.sh
+./scripts/00_create_all_bronze_tables.sh
 ```
 
 ### Create Individual Tables
 ```bash
 # Example: Create only taxi trips bronze table
-bq query --use_legacy_sql=false --project_id=chicago-bi-app-msds-432-476520 < 02_bronze_taxi_trips.sql
+bq query --use_legacy_sql=false --project_id=chicago-bi-app-msds-432-476520 < sql/02_bronze_taxi_trips.sql
 ```
 
 ## Data Volume Summary

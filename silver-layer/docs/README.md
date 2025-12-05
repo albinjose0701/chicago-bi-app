@@ -176,7 +176,7 @@ GROUP BY geography_type;
 ### Create All Tables
 ```bash
 cd ~/Desktop/chicago-bi-app/silver-layer
-./00_create_all_silver_tables.sh
+./scripts/00_create_all_silver_tables.sh
 ```
 
 ### Create Individual Tables

@@ -1194,8 +1194,8 @@ Common fields:  trip_id, timestamps, miles, fare, trip_total, location data
 - `FINAL_IMPLEMENTATION_PLAN.md` v1.0.0 - Complete implementation plan
 
 #### Infrastructure Scripts
-- `setup_gcp_infrastructure.sh` - Complete GCP setup
-- `setup_budget_shutdown.sh` - Budget controls and auto-shutdown
+- `scripts/setup_gcp_infrastructure.sh` - Complete GCP setup
+- `scripts/setup_budget_shutdown.sh` - Budget controls and auto-shutdown
 
 #### Geospatial
 - GeoPandas scripts for boundary processing

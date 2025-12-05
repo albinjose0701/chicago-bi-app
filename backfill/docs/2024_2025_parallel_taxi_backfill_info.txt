@@ -1,0 +1,34 @@
+2024-2025 Taxi Backfill - 7-Way Parallel Execution
+Started: Wed Nov  5 14:20:59 IST 2025
+
+Process IDs:
+  2024 Q1 (Jan-Mar): 28666
+  2024 Q2 (Apr-Jun): 28737
+  2024 Q3 (Jul-Sep): 28878
+  2024 Q4 (Oct-Dec): 28975
+  2025 Q1 (Jan-Mar): 29061
+  2025 Q2 (Apr-Jun): 29144
+  2025 Q3 (Jul-Oct): 29230
+
+Monitoring:
+  ps -p 28666 28737 28878 28975 29061 29144 29230
+
+Logs:
+  2024 Q1: backfill_q1_2024_taxi_only_*.log
+  2024 Q2: backfill_q2_2024_taxi_only_*.log
+  2024 Q3: backfill_q3_2024_taxi_only_*.log
+  2024 Q4: backfill_q4_2024_taxi_only_*.log
+  2025 Q1: backfill_q1_2025_taxi_only_*.log
+  2025 Q2: backfill_q2_2025_taxi_only_*.log
+  2025 Q3: backfill_q3_2025_taxi_only_*.log
+
+Completion Times:
+  2024 Q1: Wed Nov  5 17:04:51 IST 2025 (exit: 0)
+  2024 Q2: Wed Nov  5 17:05:00 IST 2025 (exit: 0)
+  2024 Q3: Wed Nov  5 17:09:55 IST 2025 (exit: 0)
+  2024 Q4: Wed Nov  5 17:09:55 IST 2025 (exit: 0)
+  2025 Q1: Wed Nov  5 17:09:55 IST 2025 (exit: 0)
+  2025 Q2: Wed Nov  5 17:09:55 IST 2025 (exit: 0)
+  2025 Q3: Wed Nov  5 17:09:55 IST 2025 (exit: 0)
+
+Finished: Wed Nov  5 17:09:55 IST 2025

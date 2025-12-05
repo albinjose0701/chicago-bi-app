@@ -1,0 +1,12 @@
+Q3/Q4 Parallel Backfill Started: Tue Nov  4 05:10:37 IST 2025
+Q3 PID: 54806
+Q4 PID: 55057
+Q2 Completion: Tue Nov  4 05:10:37 IST 2025
+
+================================================
+Q3/Q4 Parallel Backfill Completion Report
+================================================
+Completion Time: Tue Nov  4 05:10:37 IST 2025
+Q3 Exit Code: 127
+Q4 Exit Code: 127
+

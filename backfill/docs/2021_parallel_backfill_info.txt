@@ -1,0 +1,17 @@
+2021 Full Year Parallel Backfill Started: Tue Nov  4 16:29:54 IST 2025
+Q1 PID: 14721
+Q2 PID: 14729
+Q3 PID: 15200
+Q4 PID: 15442
+
+
+Q1 Completed: Tue Nov  4 23:43:57 IST 2025
+Q1 Exit Code: 0
+Q2 Completed: Tue Nov  4 23:43:57 IST 2025
+Q2 Exit Code: 0
+Q3 Completed: Tue Nov  4 23:56:37 IST 2025
+Q3 Exit Code: 0
+Q4 Completed: Wed Nov  5 00:11:59 IST 2025
+Q4 Exit Code: 0
+
+Total Duration: 7h 42m

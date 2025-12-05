@@ -17,11 +17,11 @@
 | Document | Version | Purpose | Start Here If... |
 |----------|---------|---------|------------------|
 | **README.md** | 2.22.0 | Architecture | You want to understand the system |
-| **CURRENT_STATUS_v2.22.0.md** | 2.22.0 | Project status | You want current progress |
+| **docs/reference/CURRENT_STATUS_v2.22.0.md** | 2.22.0 | Project status | You want current progress |
 | **CHANGELOG.md** | 2.22.0 | What changed | You want to know what's new |
-| **DASHBOARD_IMPLEMENTATION_PLAN.md** | 2.22.0 | Dashboard specs | You want dashboard details |
-| **LOOKER_STUDIO_AUTO_REFRESH_GUIDE.md** | 2.21.2 | Dashboard config | You need auto-refresh setup |
-| **AUTOMATION_GUIDE.md** | 2.21.0 | Pipeline automation | You need Cloud Run setup |
+| **dashboards/docs/DASHBOARD_IMPLEMENTATION_PLAN.md** | 2.22.0 | Dashboard specs | You want dashboard details |
+| **dashboards/docs/LOOKER_STUDIO_AUTO_REFRESH_GUIDE.md** | 2.21.2 | Dashboard config | You need auto-refresh setup |
+| **transformations/permits/docs/AUTOMATION_GUIDE.md** | 2.21.0 | Pipeline automation | You need Cloud Run setup |
 
 ---
 
@@ -68,7 +68,7 @@ MAJOR.MINOR.PATCH
 ## 📂 Quick File Finder
 
 ### "Where do I start?"
-→ `START_HERE.md` (v2.0.0)
+→ `docs/START_HERE.md` (v2.0.0)
 
 ### "How do I deploy?"
 → `DEPLOYMENT_GUIDE.md` (v2.0.0)

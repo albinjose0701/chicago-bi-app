@@ -1,0 +1,25 @@
+2023 Taxi Backfill - 4-Way Parallel Execution
+Started: Wed Nov  5 09:47:14 IST 2025
+
+Process IDs:
+  Q1 (Jan-Mar): 18155
+  Q2 (Apr-Jun): 18441
+  Q3 (Jul-Sep): 18703
+  Q4 (Oct-Dec): 18957
+
+Monitoring:
+  ps -p 18155 18441 18703 18957
+
+Logs:
+  Q1: backfill_q1_2023_taxi_only_*.log
+  Q2: backfill_q2_2023_taxi_only_*.log
+  Q3: backfill_q3_2023_taxi_only_*.log
+  Q4: backfill_q4_2023_taxi_only_*.log
+
+Completion Times:
+  Q1: Wed Nov  5 12:35:27 IST 2025 (exit: 0)
+  Q2: Wed Nov  5 12:54:41 IST 2025 (exit: 0)
+  Q3: Wed Nov  5 12:54:41 IST 2025 (exit: 0)
+  Q4: Wed Nov  5 12:54:41 IST 2025 (exit: 0)
+
+Finished: Wed Nov  5 12:54:41 IST 2025

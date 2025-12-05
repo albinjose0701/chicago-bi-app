@@ -50,7 +50,7 @@ Deprecated or historical documentation.
 ## 🚀 Quick Links
 
 **Getting Started:**
-- [Start Here](../START_HERE.md) - Main project entry point
+- [Start Here](START_HERE.md) - Main project entry point
 - [Quick Start Guide](guides/QUICKSTART.md) - Get up and running fast
 - [Deployment Guide](deployment/DEPLOYMENT_GUIDE.md) - Production deployment
 
